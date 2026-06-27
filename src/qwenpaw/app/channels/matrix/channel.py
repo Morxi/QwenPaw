@@ -3077,7 +3077,7 @@ class MatrixChannel(BaseChannel):
         accumulated_text: str = "",
     ) -> None:
         state = self._get_stream_state(send_meta)
-        event_id = await self.send(
+        event_id = await self._send_message(
             to_handle,
             self._STREAM_PLACEHOLDER,
             send_meta,
@@ -3135,12 +3135,13 @@ class MatrixChannel(BaseChannel):
     # Returns the event_id of the sent message, or None on failure.
     # ------------------------------------------------------------------
 
-    async def send(
+    async def _send_message(
         self,
         to_handle: str,
         text: str,
         meta: Optional[Dict[str, Any]] = None,
     ) -> Optional[str]:
+        """Internal send that returns the Matrix event_id (or None)."""
         if not self._client:
             logger.error("MatrixChannel: send called but client not ready")
             return None
@@ -3196,6 +3197,14 @@ class MatrixChannel(BaseChannel):
             return None
         finally:
             await self._send_typing(room_id, False)
+
+    async def send(
+        self,
+        to_handle: str,
+        text: str,
+        meta: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        await self._send_message(to_handle, text, meta)
 
     # ------------------------------------------------------------------
     # Outgoing send — media
