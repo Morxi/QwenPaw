@@ -234,6 +234,7 @@ class MatrixChannel(BaseChannel):
         filter_tool_messages: bool = False,
         no_text_debounce: bool = True,
         filter_thinking: bool = False,
+        streaming_enabled: bool = False,
         workspace_dir: Path | None = None,
         access_control_dm: bool = False,
         access_control_group: bool = False,
@@ -247,6 +248,7 @@ class MatrixChannel(BaseChannel):
             filter_tool_messages=filter_tool_messages,
             no_text_debounce=no_text_debounce,
             filter_thinking=filter_thinking,
+            streaming_enabled=streaming_enabled,
             access_control_dm=access_control_dm,
             access_control_group=access_control_group,
         )
@@ -345,6 +347,7 @@ class MatrixChannel(BaseChannel):
                 filter_thinking or raw.get("filter_thinking", False)
             ),
             no_text_debounce=no_text_debounce,
+            streaming_enabled=raw.get("streaming_enabled", False),
             workspace_dir=workspace_dir,
             access_control_dm=bool(raw.get("access_control_dm", False)),
             access_control_group=bool(raw.get("access_control_group", False)),
